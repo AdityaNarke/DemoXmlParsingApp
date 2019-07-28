@@ -1,0 +1,10 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<div class="upload-text">
+   <p *ngIf="errorMessage">{{errorMessage}}</p>
+   <div>Upload XML payload</div>
+   <input type="file" class="upload-inp" (change)="handleFileInput($event.target.files)">
+  <button class="upload-inp" (click)="uploadFileToActivity()">Save Employee Payload</button>
+</div>
+
+<router-outlet></router-outlet>
