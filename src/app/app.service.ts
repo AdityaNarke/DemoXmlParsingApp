@@ -2,8 +2,9 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import {catchError, retry} from "rxjs/internal/operators";
-import {throwError} from "rxjs/index";
+import {catchError} from 'rxjs/internal/operators';
+import {throwError} from 'rxjs/index';
+
 
 @Injectable()
 export class AppService {
@@ -17,7 +18,6 @@ export class AppService {
     headers.append('Access-Control-Allow-Origin', '*');
     let httpOptions = { headers: headers};
     return this.httpClient.post('http://localhost:8080/employee/save' , formData, httpOptions).pipe(
-        retry(3), // retry a failed request up to 3 times
         catchError(this.handleError) // then handle the error
       );
   }
@@ -25,6 +25,6 @@ export class AppService {
   private handleError(error: HttpErrorResponse) {
     return throwError(
       'Something bad happened; please try again later.');
-  };
+  }
 
 }

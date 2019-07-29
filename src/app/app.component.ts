@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {AppService} from "./app.service";
-import {ResponseInfo} from "./ResponseInfo";
+import {AppService} from './app.service';
+import {ResponseInfo} from './ResponseInfo';
+import {delay, retryWhen, take} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,14 @@ export class AppComponent {
   }
   uploadFileToActivity() {
     this.errorMessage = null;
-    this.appService.uploadXmlFile(this.fileToUpload).subscribe((resp: ResponseInfo) => {
+    this.appService.uploadXmlFile(this.fileToUpload).pipe(
+      retryWhen(err => {
+           this.errorMessage = 'Something bad happened';
+           return err.pipe(delay(10000), take(3));
+        }
+       )
+      )
+      .subscribe((resp: ResponseInfo) => {
        if (resp.status === 'failed') {
          this.errorMessage = resp.message;
        }
